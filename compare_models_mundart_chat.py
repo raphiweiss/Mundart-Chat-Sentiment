@@ -30,10 +30,9 @@ def preprocess_text(t: str) -> str:
     t = re.sub(r"[’']", " ", t)
     # Emojis einzeln separieren (keine Buckets!)
     t = re.sub(EMOJI_RE_RANGE + "+", lambda m: " " + " ".join(list(m.group(0))) + " ", t)
-    # (falls du für BoW/TF-IDF umlaut-faltest)
     t = t.replace("-", " ").replace("/", " ")
     t = (t.replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss"))
-    # Dialekt-Mapping (gekürzt)
+    # Dialekt-Mapping 
     for k,v in {"nöd":"nicht","nid":"nicht","ned":"nicht","isch":"ist","bisch":"bist","chunsch":"kommst","huere":"sehr"}.items():
         t = re.sub(rf"\b{k}\b", v, t)
     t = re.sub(rf"[^\wäöüÄÖÜß<>{EMOJI_RE_RANGE}]+", " ", t)
@@ -408,7 +407,7 @@ eval_model("TF-IDF + LogisticRegression",     tfidf,     X_te_clean, y_test)
 eval_sbert(sbert_model, sbert_clf, X_te_raw, y_test)      
 
 
-#%% ---------- 2D-Visualisierung ----------
+#%% ---------- Visualisierung ----------
 # 2D
 plot_space_for_bow(bow,   df["text_clean"], df["label"], preprocess_text(HIGHLIGHT_TEXT), annotate_points=False, max_points=100)
 plot_space_for_tfidf(tfidf, df["text_clean"], df["label"], preprocess_text(HIGHLIGHT_TEXT), annotate_points=True, max_points=20)
